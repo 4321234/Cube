@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -229,11 +230,27 @@ public String readData(String nrUslugi, final String serverUrl,
 	        ArrayList<String> controlParameterList = HTMLTableParser.htmlString;
 	        System.out.println(controlParameterList);
 	        String controlParameter = "";
-	        
+	        //jeżeli jest opcjonalny parametr 
 	        if (Constants.CUSTOM_PARAM) {
-	        	JSONObject jsonObj = new JSONObject(Constants.JSON_PARAM);
-	        	System.out.println(jsonObj.length());
 	        	
+	        	JSONObject jsonObj = new JSONObject(Constants.JSON_PARAM);
+	        	
+	        	@SuppressWarnings("rawtypes")
+				Iterator keysToCopyIterator = jsonObj.keys();
+	        	List<String> prm_to_replace = new ArrayList<String>();
+	        	
+	        	System.out.println(jsonObj);
+	        	
+	        	while(keysToCopyIterator.hasNext()) {
+	        	    String key = (String) keysToCopyIterator.next();
+	        	    prm_to_replace.add("[" + key.toString() + "]");
+	        	    prm_to_replace.add("[" + jsonObj.get(key) + "]");
+	        	    
+	        	}
+	        	
+	        	System.out.println(prm_to_replace);
+	        	
+	        //jeżeli nie ma opcjonalnego parametru
 	        }else {
 	        	
 		        for(int i=0;i<controlParameterList.size();i++){
