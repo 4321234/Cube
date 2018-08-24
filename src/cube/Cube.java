@@ -17,6 +17,8 @@ import java.util.Map;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
+import org.json.JSONObject;
+
 
 
 
@@ -225,18 +227,30 @@ public String readData(String nrUslugi, final String serverUrl,
 	        parser.parse(reader, new HTMLTableParser(), true);
 	        
 	        ArrayList<String> controlParameterList = HTMLTableParser.htmlString;
+	        System.out.println(controlParameterList);
 	        String controlParameter = "";
 	        
-	        
-	        for(int i=0;i<controlParameterList.size();i++){
+	        if (Constants.CUSTOM_PARAM) {
+	        	JSONObject jsonObj = new JSONObject(Constants.JSON_PARAM);
+	        	System.out.println(jsonObj.length());
 	        	
-	        	controlParameter = controlParameter + controlParameterList.get(i);
-	        } 
+	        }else {
+	        	
+		        for(int i=0;i<controlParameterList.size();i++){
+		        	
+		        	controlParameter = controlParameter + controlParameterList.get(i);
+		        } 
+	        	
+	        }
+	        
+
 	        
 	        
 	        HTMLTableParser.htmlString.clear();
 	        
 	        reader.close();
+	        
+	        //System.out.println("DEF_PRM: " + controlParameter);
 	        
 	      //context
 	        String context = ((Entity.Fields.Field)fields.get(44)).getValue().toString();
