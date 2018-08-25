@@ -239,7 +239,7 @@ public String readData(String nrUslugi, final String serverUrl,
 				Iterator keysToCopyIterator = jsonObj.keys();
 	        	List<String> prm_to_replace = new ArrayList<String>();
 	        	
-	        	System.out.println(jsonObj);
+	        	//System.out.println(jsonObj);
 	        	
 	        	while(keysToCopyIterator.hasNext()) {
 	        	    String key = (String) keysToCopyIterator.next();
@@ -249,6 +249,20 @@ public String readData(String nrUslugi, final String serverUrl,
 	        	}
 	        	
 	        	System.out.println(prm_to_replace);
+	        	
+	        	int i = 0;
+	        	for (i = 0; i < controlParameterList.size();i++) {
+	        		int j = 0;
+	        		for (j = 0; j < prm_to_replace.size();j=j+2) {
+	        			if (controlParameterList.get(i).toLowerCase().equals(prm_to_replace.get(j).toLowerCase())){
+	        				System.out.println(controlParameterList.get(i) + " - jest taki sam jak - " + prm_to_replace.get(j));
+	        				controlParameterList.set(i+1, prm_to_replace.get(j+1));
+	        			}else {
+	        				//System.out.println(controlParameterList.get(i) + " - nie jest taki sam jak - " + prm_to_replace.get(j));
+	        			}
+	        			
+	        		}
+	        	}
 	        	
 	        //jeżeli nie ma opcjonalnego parametru
 	        }else {
@@ -260,7 +274,7 @@ public String readData(String nrUslugi, final String serverUrl,
 	        	
 	        }
 	        
-
+	        System.out.println(controlParameterList);
 	        
 	        
 	        HTMLTableParser.htmlString.clear();
