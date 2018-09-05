@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Pattern;
 
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
@@ -43,7 +43,7 @@ public class Cube {
 				Constants.CUSTOM_PARAM = true;
 			}
 			
-			System.out.println(Constants.HOST + "|" + Constants.PORT + "|" + Constants.USERNAME + "|" + Constants.PASSWORD + "|" + Constants.DOMAIN + "|" + Constants.PROJECT + "|" + Constants.PARAM + "|" + Constants.ID + "|" + Constants.JSON_PARAM + "|" + Constants.CUSTOM_PARAM);
+			//System.out.println(Constants.HOST + "|" + Constants.PORT + "|" + Constants.USERNAME + "|" + Constants.PASSWORD + "|" + Constants.DOMAIN + "|" + Constants.PROJECT + "|" + Constants.PARAM + "|" + Constants.ID + "|" + Constants.JSON_PARAM + "|" + Constants.CUSTOM_PARAM);
 			switch (Constants.PARAM) {
             case "o":	
             		new Cube().createOrder(Constants.ID,
@@ -228,7 +228,7 @@ public String readData(String nrUslugi, final String serverUrl,
 	        parser.parse(reader, new HTMLTableParser(), true);
 	        
 	        ArrayList<String> controlParameterList = HTMLTableParser.htmlString;
-	        System.out.println(controlParameterList);
+	        //System.out.println(controlParameterList);
 	        String controlParameter = "";
 	        //jeżeli jest opcjonalny parametr 
 	        if (Constants.CUSTOM_PARAM) {
@@ -248,34 +248,42 @@ public String readData(String nrUslugi, final String serverUrl,
 	        	    
 	        	}
 	        	
-	        	System.out.println(prm_to_replace);
+	        	//System.out.println(prm_to_replace);
 	        	
 	        	int i = 0;
 	        	for (i = 0; i < controlParameterList.size();i++) {
+	        		if (controlParameterList.get(i).contains("}^{")) {
+	        			String input = controlParameterList.get(i);
+	        			input = input.replace("{", "").replace("}", "").replace("[", "").replace("]", "");
+	        			String[] inputs = input.split(Pattern.quote("^"));
+
+	        			if (inputs.length == 4) {
+	        				controlParameterList.set(i, "[" + inputs[2] + "]");
+	        			}	
+	        		}	        		
 	        		int j = 0;
 	        		for (j = 0; j < prm_to_replace.size();j=j+2) {
 	        			if (controlParameterList.get(i).toLowerCase().equals(prm_to_replace.get(j).toLowerCase())){
-	        				System.out.println(controlParameterList.get(i) + " - jest taki sam jak - " + prm_to_replace.get(j));
+	        				//System.out.println(controlParameterList.get(i) + " - jest taki sam jak - " + prm_to_replace.get(j));
 	        				controlParameterList.set(i+1, prm_to_replace.get(j+1));
 	        			}else {
 	        				//System.out.println(controlParameterList.get(i) + " - nie jest taki sam jak - " + prm_to_replace.get(j));
 	        			}
-	        			
 	        		}
 	        	}
-	        	
+
 	        //jeżeli nie ma opcjonalnego parametru
-	        }else {
-	        	
-		        for(int i=0;i<controlParameterList.size();i++){
-		        	
-		        	controlParameter = controlParameter + controlParameterList.get(i);
-		        } 
-	        	
 	        }
+	        	
+	        for(int i=0;i<controlParameterList.size();i++){
+	        	
+	        	controlParameter = controlParameter + controlParameterList.get(i);
+	        } 
+	        	
 	        
-	        System.out.println(controlParameterList);
 	        
+	        //System.out.println("controlParameterList: "+controlParameterList);
+	        //System.out.println("controlParameter: "+controlParameter);
 	        
 	        HTMLTableParser.htmlString.clear();
 	        
